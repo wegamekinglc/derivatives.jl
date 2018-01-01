@@ -1,6 +1,12 @@
+push!(LOAD_PATH, Base.source_dir())
+
 using Miletus
 using DataFrames
 using Base.Dates
+using Utilities
+
+import PyPlot
+const plt = PyPlot
 
 import Miletus: Give, Both
 
@@ -29,6 +35,10 @@ put2 = EuropeanPut(maturity, SingleStock(), lower_bound)
 
 contract = Both(Both(call1, put1), Give(Both(call2, put2)))
 
+# payoff_curve
+prices = lower_bound - 1000.:100.0:upper_bound + 1000
+xs, ys = Utilities.payoff_curve(contract, maturity, prices)
+
 # Evaluation
 gbmm = GeomBMModel(evaluation, spot, risk_free, dividend, volatility)
 npv = value(gbmm, contract)
@@ -51,3 +61,7 @@ df = DataFrame(price_table)
 names!(df, [Symbol("vol - $v") for v in vol_scenarios])
 df[:spot] = spot_scenarios
 println(df)
+
+# Show the payoff graph
+fig = plt.plot(xs, ys)
+plt.show()
