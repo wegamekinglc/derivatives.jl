@@ -1,12 +1,10 @@
 push!(LOAD_PATH, Base.source_dir())
 
 using Miletus
+using Gadfly
 using DataFrames
 using Base.Dates
-using Utilities
-
-import PyPlot
-const plt = PyPlot
+using utilities
 
 import Miletus: Give, Both
 
@@ -37,7 +35,9 @@ contract = Both(Both(call1, put1), Give(Both(call2, put2)))
 
 # payoff_curve
 prices = lower_bound - 1000.:100.0:upper_bound + 1000
-xs, ys = Utilities.payoff_curve(contract, maturity, prices)
+xs, ys = utilities.payoff_curve(contract, maturity, prices)
+
+payoffs = DataFrame(spot=xs, payoff=ys)
 
 # Evaluation
 gbmm = GeomBMModel(evaluation, spot, risk_free, dividend, volatility)
@@ -57,11 +57,9 @@ for (i, spot) in enumerate(spot_scenarios)
     end
 end
 
-df = DataFrame(price_table)
-names!(df, [Symbol("vol - $v") for v in vol_scenarios])
-df[:spot] = spot_scenarios
-println(df)
+scenarios = DataFrame(price_table)
+names!(scenarios, [Symbol("vol - $v") for v in vol_scenarios])
+scenarios[:spot] = spot_scenarios
+println(scenarios)
 
-# Show the payoff graph
-fig = plt.plot(xs, ys)
-plt.show()
+plot(payoffs, Geom.line, x="spot", y="payoff")

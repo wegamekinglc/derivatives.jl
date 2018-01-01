@@ -1,4 +1,4 @@
-module Utilities
+module utilities
 
 using Miletus
 
