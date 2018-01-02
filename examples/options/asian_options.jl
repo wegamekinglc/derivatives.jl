@@ -14,6 +14,5 @@ m = GeomBMModel(evaluation, spot, risk_free, dividend, volatility)
 mcm = montecarlo(m, evaluation:maturity, 100_000)
 
 npv = value(mcm, asian_call)
-#Δ = delta(mcm, asian_call)
 
 println(npv)
