@@ -1,6 +1,6 @@
-﻿# derivatives.jl
+# derivatives.jl
  
- ## 环境
+## 环境
  
  * JuliaPro
  * JuliaFin
