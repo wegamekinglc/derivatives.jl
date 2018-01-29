@@ -1,5 +1,4 @@
 using Gadfly
-using Interpolations
 using DataFrames
 
 f̄ = [0.1, 0.0, -0.1]
@@ -61,3 +60,4 @@ df2 = DataFrame(
 
 df = vcat(df1, df2)
 fig = plot(df, x=:σ, y=:μ, color=:style, Geom.line)
+display(fig)
